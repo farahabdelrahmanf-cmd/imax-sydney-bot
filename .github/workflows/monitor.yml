@@ -1,0 +1,38 @@
+name: 24/7 IMAX Sydney Ticket Monitor
+
+on:
+  schedule:
+    # Runs every 5 minutes around the clock
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Install Playwright browsers and OS dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Cloud Monitor Loop
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC || 'imax-odyssey-farah-2026' }}
+          CINEMA_URL: https://www.eventcinemas.com.au/cinema/imax-sydney
+          TARGET_MOVIE_TITLE: "The Odyssey"
+          TARGET_DAYS_OF_WEEK: "5,6,0"
+          EARLIEST_TIME: "17:00"
+          HEADLESS: "true"
+        run: npm run cloud-monitor

@@ -1,0 +1,32 @@
+{
+  "name": "imax-sydney-bot",
+  "version": "1.0.0",
+  "description": "Auto-monitor and seat-holding tool for IMAX Sydney Coca-Cola Box",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "test-alert": "tsx scripts/test-alert.ts",
+    "test-scan": "tsx scripts/test-scan.ts",
+    "cloud-monitor": "tsx src/cloud-monitor.ts",
+    "build": "tsc"
+  },
+  "keywords": ["imax", "bot", "event-cinemas", "ticket-hold"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "node-fetch": "^3.3.2",
+    "node-notifier": "^10.0.1",
+    "playwright": "^1.49.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/node-notifier": "^8.0.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
