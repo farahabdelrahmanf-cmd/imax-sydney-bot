@@ -1,0 +1,40 @@
+name: 2-Minute Test Notification
+
+on:
+  workflow_dispatch:
+
+jobs:
+  delayed_notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait exactly 2 minutes in the cloud
+        run: |
+          echo "Cloud timer started at $(date). Sleeping for 120 seconds..."
+          sleep 120
+          echo "2 minutes reached at $(date)! Sending test alert to both topics..."
+          
+          # Topic 1
+          curl -s -X POST https://ntfy.sh \
+            -H "Content-Type: application/json" \
+            -d '{
+              "topic": "imax-odyssey-farah-2026",
+              "title": "🎉 24/7 CELLULAR TEST SUCCESSFUL!",
+              "message": "Your laptop is off & disconnected, but GitHub cloud servers just delivered this alert to your phone over mobile data! The system is 100% operational.",
+              "priority": 5,
+              "tags": ["tada", "white_check_mark", "tickets"],
+              "click": "https://www.eventcinemas.com.au/cinema/imax-sydney"
+            }'
+            
+          # Topic 2
+          curl -s -X POST https://ntfy.sh \
+            -H "Content-Type: application/json" \
+            -d '{
+              "topic": "imax-sydney-odyssey-alerts",
+              "title": "🎉 24/7 CELLULAR TEST SUCCESSFUL!",
+              "message": "Your laptop is off & disconnected, but GitHub cloud servers just delivered this alert to your phone over mobile data! The system is 100% operational.",
+              "priority": 5,
+              "tags": ["tada", "white_check_mark", "tickets"],
+              "click": "https://www.eventcinemas.com.au/cinema/imax-sydney"
+            }'
+            
+          echo "Dispatched to both topics successfully!"
