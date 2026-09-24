@@ -42,8 +42,8 @@ async function runCloudMonitor() {
       if (newSessions.length > 0 && cycle > 1) {
         console.log(`[Cloud] 🌟 NEW BATCH DROPPED! Found ${newSessions.length} new session(s)!`);
         for (const s of newSessions) {
-          if (s.isWeekend && s.isEvening) {
-            console.log(`   -> Alerting phone for new weekend session: ${s.sessionId} (${s.dayName} ${s.timeFormatted})`);
+          if (s.isWeekend || s.isEvening) {
+            console.log(`   -> Alerting phone for new session: ${s.sessionId} (${s.dayName} ${s.timeFormatted})`);
             await Notifier.sendMobileAlert(s, s.bookingUrl);
           }
         }

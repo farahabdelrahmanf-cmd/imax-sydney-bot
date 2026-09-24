@@ -128,10 +128,10 @@ export class SessionMonitor {
   }
 
   /**
-   * Filters sessions matching user criteria (e.g. Fri/Sat/Sun after 5:00 PM)
+   * Filters sessions matching user criteria (e.g. Fri/Sat/Sun or any evening session)
    */
   filterTargetSessions(sessions: CinemaSession[]): CinemaSession[] {
-    return sessions.filter(s => s.isWeekend && s.isEvening);
+    return sessions.filter(s => s.isWeekend || s.isEvening);
   }
 
   /**
