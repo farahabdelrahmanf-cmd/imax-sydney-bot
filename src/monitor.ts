@@ -65,6 +65,8 @@ export class SessionMonitor {
               timeFormatted: label,
               dayOfWeek: -1,
               dayName: "Unknown",
+              hour: 0,
+              minute: 0,
               isWeekend: true,
               isEvening: true,
               bookingUrl: fullUrl.replace(/&amp;/g, "&")
@@ -121,6 +123,8 @@ export class SessionMonitor {
       timeFormatted,
       dayOfWeek,
       dayName,
+      hour,
+      minute,
       isWeekend,
       isEvening,
       bookingUrl: `https://www.eventcinemas.com.au/orders/tickets#sessionId=${sessionId}`
@@ -128,10 +132,32 @@ export class SessionMonitor {
   }
 
   /**
-   * Filters sessions matching user criteria (e.g. Fri/Sat/Sun or any evening session)
+   * Filters sessions matching user criteria:
+   * - ANY time on Saturday or Sunday
+   * - Friday afternoon/evening (from 2:00 PM onwards, covering 2:15 PM and all evenings)
+   * - Thursday afternoon/evening (from 3:00 PM onwards, covering 3:45 PM and all evenings)
+   * - Or any evening session (after 5:00 PM) on any day
    */
   filterTargetSessions(sessions: CinemaSession[]): CinemaSession[] {
-    return sessions.filter(s => s.isWeekend || s.isEvening);
+    return sessions.filter(s => {
+      // 1. Any time on Saturday (6) or Sunday (0)
+      if (s.dayOfWeek === 6 || s.dayOfWeek === 0) {
+        return true;
+      }
+      // 2. Friday (5): from 2:00 PM (14:00) onwards, covering 2:15 PM and all evenings
+      if (s.dayOfWeek === 5 && s.hour >= 14) {
+        return true;
+      }
+      // 3. Thursday (4): from 3:00 PM (15:00) onwards, covering 3:45 PM and all evenings
+      if (s.dayOfWeek === 4 && s.hour >= 15) {
+        return true;
+      }
+      // 4. Any other day evening (after 5:00 PM / 17:00)
+      if (s.hour >= 17) {
+        return true;
+      }
+      return false;
+    });
   }
 
   /**

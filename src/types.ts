@@ -6,6 +6,8 @@ export interface CinemaSession {
   timeFormatted: string;
   dayOfWeek: number; // 0 = Sun, 1 = Mon, ..., 5 = Fri, 6 = Sat
   dayName: string;
+  hour: number;
+  minute: number;
   isWeekend: boolean;
   isEvening: boolean;
   bookingUrl: string;
